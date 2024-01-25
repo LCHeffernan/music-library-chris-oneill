@@ -48,7 +48,7 @@ describe("Read Artists", () => {
       expect(body).to.deep.equal(artists[0]);
     });
 
-    it("resturns a 404 if the artist does not exist", async () => {
+    it("returns a 404 if the artist does not exist", async () => {
       const { status, body } = await request(app)
         .get("/artists/999999999")
         .send();
