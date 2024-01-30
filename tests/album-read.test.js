@@ -53,4 +53,24 @@ describe("Read Albums", () => {
       });
     });
   });
+
+  describe("GET /albums/{id}", () => {
+    it("returns the albums with the correct id", async () => {
+      const { status, body } = await request(app)
+        .get(`/albums/${albums[0].id}`)
+        .send();
+
+      expect(status).to.equal(200);
+      expect(body).to.deep.equal(albums[0]);
+    });
+
+    it("returns a 404 if the artist does not exist", async () => {
+      const { status, body } = await request(app)
+        .get("/albums/111111111")
+        .send();
+
+      expect(status).to.equal(404);
+      expect(body.message).to.equal("album 111111111 does not exist");
+    });
+  });
 });
