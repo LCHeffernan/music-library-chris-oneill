@@ -43,4 +43,26 @@ const getAlbumById = async (req, res) => {
   }
 };
 
-module.exports = { createAlbum, readAlbums, getAlbumById };
+const patchAlbum = async (req, res) => {
+  const { id } = req.params;
+  const { name, year } = req.body;
+
+  try {
+    const {
+      rows: [album],
+    } = await db.query(
+      "UPDATE Albums SET name = $1, year = $2 WHERE id = $3 RETURNING *",
+      [name, year, id]
+    );
+
+    if (!album) {
+      return res.status(404).json({ message: `album ${id} does not exist` });
+    }
+
+    res.status(200).json(album);
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+};
+
+module.exports = { createAlbum, readAlbums, getAlbumById, patchAlbum };
